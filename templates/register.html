@@ -13,29 +13,13 @@
     </a>
  
     <ul class="navbar-nav ml-auto">
-       <li class="nav-item">
-           <a class="nav-link" href="{{url_for('teacher_reg')}}">
-             Teachers
-           </a>
-       </li>
        
-       <li class="nav-item">
-          <a class="nav-link " href="{{url_for('attendance_sys')}}">
-            Attendance
-          </a>
-      </li>
-
       <li class="nav-item">
          <a class="nav-link" href="{{url_for('person1')}}">
            Per-person
          </a>
      </li>
-     <li class="nav-item">
-      <a class="nav-link" href="{{url_for('logout')}}">
-        Logout
-      </a>
-  </li>
- 
+     
  
    </ul>
   </nav>
@@ -178,7 +162,7 @@ div.ex1 {
 </head>
 <body>
 
-<h2>Login</h2>
+
 
 <!-- <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button> -->
 
@@ -204,8 +188,27 @@ div.ex1 {
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-      
+      {%with messages=get_flashed_messages()%}
+        {%if messages%} 
+        {%for message in messages%}
+        {%if message == 1 %}
+        <div class="alert alert-danger alert-dismissable mt-2" role="alert">
+           <button type="button" class="close" data-dismiss="alert" aria-label="close">
+               <span aria-hidden="true">x</span>
+           </button>
+           Invalid Login
+       </div>
+
+       {% else %}
+
+        <div class="alert alert-success alert-dismissable mt-2" role="alert">
+            
+            {{message}}
+        </div>
+        {%endif%}
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
     </div>
   </form>
 <!-- </div> -->

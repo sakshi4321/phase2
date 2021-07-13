@@ -98,10 +98,15 @@ def login(): # define login page fucntion
     
         dbuser = Users.query.filter_by(id=user).first()
         #print(dbuser.)
-        if user==dbuser.id and password==dbuser.password: 
-            print("check")
-            login_user(dbuser)
-            return redirect(url_for('teacher_reg'))
+        if dbuser is None:
+            flash('Invalid Login')
+            return redirect(url_for("login")) 
+        #print(dbuser.)
+        else:
+            if user==dbuser.id and password==dbuser.password: 
+                print("check")
+                login_user(dbuser)
+                return redirect(url_for('teacher_reg'))
     
     return render_template('register.html')
     # if request.method=='POST': # if the request is a GET we return the login page
@@ -393,6 +398,9 @@ def excel():
        end = request.form.get("end") 
        
        qry = Attendance.query.filter(Attendance.date_att.between(start, end)).all()
+       if qry==[]:
+           
+           return redirect(url_for("attendance_records")) 
        data_list = [to_dict(item) for item in qry]
        df = pd.DataFrame(data_list)
        #print(df)
