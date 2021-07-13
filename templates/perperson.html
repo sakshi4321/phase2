@@ -1,0 +1,110 @@
+{% extends 'base.html'%}
+
+{%block title%} Per Person Detail {%endblock%}
+
+
+{%block body%}
+<script>
+  setTimeout(()=>{
+       window.location.reload(true);
+    }, 2000);
+</script>
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <a class="navbar-brand" href="#">
+       <img src="{{ url_for('static',filename='cme.jpg') }}" width="35" height="35" class="d-inline-block align-top" alt="#">
+      College of Military Engineering,Pune
+    </a>
+ 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('login')}}">
+          Login
+        </a>
+    </li>
+       <li class="nav-item">
+           <a class="nav-link" href="{{url_for('teacher_reg')}}">
+             Teachers
+           </a>
+       </li>
+       
+       <li class="nav-item">
+          <a class="nav-link" href="{{url_for('attendance_sys')}}">
+            Attendance
+          </a>
+      </li>
+
+      <li class="nav-item">
+         <a class="nav-link font-weight-bold text-dark" href="{{url_for('person1')}}">
+           Per-person
+         </a>
+     </li>
+     <li class="nav-item">
+      <a class="nav-link" href="{{url_for('logout')}}">
+        Logout
+      </a>
+  </li>
+ 
+   </ul>
+  </nav>
+
+  <div class="container mt-3">
+    <center>
+    
+    <div id="camera">
+       <!-- <img src="/static/{{path}}" alt="capture"> -->
+       <img src="/static/{{path}}" alt="Image captured" onerror=this.src="/static/person.png" height="500px">
+    </div>
+    
+    
+
+      
+
+    <table class="table table-bordered text-center mt-2">
+      <tbody>
+          <tr>
+            
+            <td>Number</td>
+            <td>{{roll_no}}</td>
+          </tr>
+
+          <tr>
+            <td>Rank</td>
+            <td>{{rank}}</td>
+          </tr>
+    
+          <tr>
+            <td>First Name</td>
+            <td>{{first_name}}</td>
+          </tr>
+    
+          <tr>
+            <td>Last Name</td>
+            <td>{{last_name}}</td>
+          </tr>
+    
+          <tr>
+            <td>Date</td>
+            <td>{{date}}</td>
+          </tr>
+
+          <tr>
+              <td>In time</td>
+              <td>{{in_time}}</td>
+          </tr>
+
+          <tr>
+              <td>Out Time</td>
+              <td>{{out_time}}</td>
+          </tr>
+
+  
+  
+      </tbody>
+    </table>
+
+
+</center>
+</div>
+
+
+{%endblock%}

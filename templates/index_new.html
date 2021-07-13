@@ -1,0 +1,311 @@
+{% extends 'base.html'%}
+
+{%block title%} Home {%endblock%}
+
+
+{%block body%} 
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+   <a class="navbar-brand" href="#">
+      <img src="{{ url_for('static',filename='cme.jpg') }}" width="35" height="35" class="d-inline-block align-top" alt="#">
+     College of Military Engineering,Pune
+   </a>
+
+   <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+          <a class="nav-link font-weight-bold text-dark" href="{{url_for('teacher_reg')}}">
+            Teachers
+          </a>
+      </li>
+      
+      <li class="nav-item">
+         <a class="nav-link" href="{{url_for('attendance_sys')}}">
+           Attendance
+         </a>
+     </li>
+     <li class="nav-item">
+      <a class="nav-link" href="{{url_for('person1')}}">
+        Per-person
+      </a>
+  </li>
+
+  <li class="nav-item">
+   <a class="nav-link" href="{{url_for('logout')}}">
+     Logout
+   </a>
+</li>
+  </ul>
+ </nav>
+
+ <div class="container mt-4">
+   
+         
+      
+   <div class="row">
+       <div class="col-md-4"><h2>Teacher's Records</h2></div>
+       <input type="text" id="filter" class="form-control col-md-3 ml-auto" placeholder="Search">
+       
+   </div>
+
+   
+    {%with messages=get_flashed_messages()%}
+       {%if messages%} 
+       {%for message in messages%}
+       {%if message == 1 %}
+       <div class="alert alert-danger alert-dismissable mt-2" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="close">
+              <span aria-hidden="true">x</span>
+          </button>
+          Teacher Exists in the database !!!!
+      </div>
+
+      {% else %}
+
+       <div class="alert alert-success alert-dismissable mt-2" role="alert">
+           <button type="button" class="close" data-dismiss="alert" aria-label="close">
+               <span aria-hidden="true">x</span>
+           </button>
+           {{message}}
+       </div>
+       {%endif%}
+       {%endfor%}
+       {%endif%}
+       {%endwith%}
+   
+
+   <div class="row mt-4" style="overflow: auto;height: 630px;">
+       <table class="table table-hover table-dark" id="table1" style="border-collapse: collapse;">
+         
+           <tr>
+
+               <th class="text-center" style="position: sticky;top: 0;">Number</th>
+               <th class="text-center" style="position: sticky;top: 0;">Rank</th>
+               <th class="text-center" style="position: sticky;top: 0;">First Name</th>
+               <th class="text-center" style="position: sticky;top: 0;">Last Name</th>
+               <th class="text-center" style="position: sticky;top: 0;">Phone</th>
+               <th class="text-center" style="position: sticky;top: 0;">Attendance</th>
+   
+               <!-- <th style="position: sticky;top: 0;">Stream</th> -->
+             
+               <th class="text-center" style="position: sticky;top: 0;">Action</th>
+
+           </tr>
+          
+           {% for row,row_att in teachers %}
+
+          <tbody class="searchable">
+
+           <tr>
+               <td class="text-center">{{row.roll_no}}</td>
+               <td class="text-center">{{row.rank}}</td>
+               <td class="text-center">{{row.first_name}}</td>
+               <td class="text-center">{{row.last_name}}</td>
+               <td class="text-center">{{row.phone}}</td>
+               {% if row_att.in_out %}
+               <td class="text-center">Present</td>
+               {% else %} 
+               <td class="text-center">Absent</td>
+               {% endif %}
+
+          
+          
+             
+               <td class="text-center"> 
+                   <a href="/update/{{row.roll_no}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.roll_no}}">Edit</a>
+                   <a href="/delete/{{row.roll_no}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+               </td>
+
+           </tr>
+          </tbody>
+          
+         
+
+
+           
+
+
+
+
+           <div id="modaledit{{row.roll_no}}" class="modal fade" role="dialog">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <h4 class="modal-title">Update Information</h4>
+                     </div>
+             
+             
+                     <div class="modal-body">
+
+                        <form action="{{url_for('update')}}" method="POST">
+                           <!-- <div class="form-group">
+                               <label>Roll Number:</label>
+                               <input type="number" class="form-control" name="roll" required="1" value="{{row.roll_no}}">
+                            </div> -->
+
+                            <!-- <div class="form-group">
+                                     <label for="sel_rank">Rank:</label>
+                                     <select class="form-control" id="sel_rank" name="rank">
+                                        <option>Captain</option>
+                                        <option>class B</option>
+                                        <option>class C</option>
+                                        <option>class D</option>
+                                     </select>
+                                  </div>  -->
+
+                            <div class="form-group">
+                               <label for="sel_rank">Rank:</label>
+                               <select class="form-control" id="sel_rank" name="rank" required="1">
+                                  <option>{{row.rank}}</option>
+                                  <option>Captain</option>
+                                  <option>Civilian</option>
+                                  <option>Major</option>
+                                  <!-- <option>Major</option> -->
+                               </select>
+                            </div> 
+                            
+             
+             
+                           <div class="form-group">
+                              <label>First Name:</label>
+                               <input type="hidden"  name="id" value="{{row.roll_no}}">
+                              <input type="text" class="form-control" name="first_name" value="{{row.first_name}}">
+                           </div>
+             
+             
+             
+                           <div class="form-group">
+                              <label>Last Name:</label>
+                              <input type="text" class="form-control" name="last_name" value="{{row.last_name}}">
+                           </div>
+             
+             
+                           <div class="form-group">
+       
+                              <label>Phone:</label>
+                              <input type="number" class="form-control" name="phone" value="{{row.phone}}">
+   
+                           </div>
+
+
+                             
+             
+             
+                           <div class="form-group">
+                              <button class="btn btn-primary" type="submit">Update</button>
+                           </div>
+             
+             
+                        </form>
+                     </div>
+             
+             
+                     <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+
+                  </div>
+               </div>
+             
+            </div>
+           {% endfor %}
+
+       </table>
+       
+   </div>
+    <div class="col-md-12 mt-3">
+       <button class="btn btn-outline-secondary btn-md float-right font-weight-bold" data-toggle="modal" data-target="#mymodal">+ Add New Teacher</button>
+    </div>
+
+
+
+
+   <div id="mymodal" class="modal fade" role="dialog">
+       <div class="modal-dialog">
+          <div class="modal-content">
+             <div class="modal-header">
+     
+                <h4 class="modal-title">Add Teacher</h4>
+             </div>
+             <div class="modal-body">
+     
+                
+                <form action="{{ url_for('indexing') }}" method="POST">
+                   <div class="form-group">
+                       <label>Number:</label>
+                       <input type="text" class="form-control" name="roll" required="1">           
+                    </div>
+
+                    <div class="form-group">
+                      <label for="sel_rank">Rank:</label>
+                      <select class="form-control" id="sel_rank" name="rank">
+                         <option>Captain</option>
+                         <option>Civilian</option>
+                         <option>Major</option>
+                         <!-- <option>Major</option> -->
+                      </select>
+                    </div> 
+     
+     
+                   <div class="form-group">
+                      <label>First Name:</label>
+                      <input type="text" class="form-control" name="first_name" required="1">
+                   </div>
+     
+     
+                    <div class="form-group">
+                       <label>Last Name:</label>
+                       <input type="text" class="form-control" name="last_name" required="1">
+                   </div>
+     
+     
+                    <div class="form-group">
+                      <label>Phone:</label>
+                      <input type="number" class="form-control" name="phone" required="1">
+                   </div>
+
+      
+     
+     
+                   <div class="form-group">
+                      <button class="btn btn-primary" type="submit">Add Image</button>
+                   </div>
+     
+     
+                </form>
+     
+     
+             </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
+     
+     
+          </div>
+       </div>   
+    </div>
+</div>
+
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script> -->
+<script src="/static/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+
+ (function ($) {
+
+    $('#filter').keyup(function () {
+
+       var rex = new RegExp($(this).val(), 'i');
+       $('.searchable tr').hide();
+       $('.searchable tr').filter(function () {
+             return rex.test($(this).text());
+       }).show();
+
+    })
+
+ }(jQuery));
+
+});
+</script>
+
+
+{%endblock%}

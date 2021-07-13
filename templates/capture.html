@@ -1,0 +1,108 @@
+<!-- <html>
+  <head>
+  	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+    <title>Camera App</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+
+  <body> -->
+
+  {% extends 'base.html'%}
+
+  {%block title%} Complete Details {%endblock%}
+
+  {%block body%}
+  <!-- <div class="jumbotron p-3 text-center">
+    <h1>College of Military Engineering Pune</h1>
+  </div> -->
+
+  <nav class="navbar navbar-expand-md bg-light navbar-light">
+    <a class="navbar-brand" href="#">
+      <img src="{{ url_for('static',filename='cme.jpg') }}" width="35" height="35" class="d-inline-block align-top" alt="#">
+      College of Military Engineering,Pune
+    </a>
+
+    <ul class="navbar-nav ml-auto">
+       <li class="nav-item">
+           <a class="nav-link" href="#">
+             Teachers
+           </a>
+       </li>
+       <li class="nav-item">
+        <a class="nav-link" href="#">
+          Attendance
+        </a>
+      </li>
+
+   </ul>
+  </nav>
+
+  <div class="container mt-3">
+  	<center>
+  	
+      <div id="camera">
+	     <img src="/static/{{path}}" alt="capture">
+      </div>
+      
+      
+
+		
+    <form action="{{ url_for('insert') }}" method="POST">
+      <table class="table table-bordered text-center mt-2">
+        <tbody>
+          <tr>
+            
+            <td>Number</td>
+            <td>{{roll_no}}</td>
+          </tr>
+
+          <tr>
+            <td>Rank</td>
+            <td>{{rank}}</td>
+          </tr>
+    
+          <tr>
+            <td>First Name</td>
+            <td>{{first_name}}</td>
+          </tr>
+    
+          <tr>
+            <td>Last Name</td>
+            <td>{{last_name}}</td>
+          </tr>
+    
+          <tr>
+            <td>Phone</td>
+            <td>{{phone}}</td>
+          </tr>
+
+    
+    
+        </tbody>
+      </table>
+      <div class="form-group">
+        <button class="btn btn-primary" type="submit">submit</button>
+    </div>
+  </form>
+
+</center>
+  </div>
+  <!-- </body>
+</html> -->
+
+{%endblock%}
+
+
+
+
+
+<!-- <script>
+  $(document).ready(function(){
+
+   $('#email').click(function () {
+      $('#input-hidden').css({'visibility':'visible','display':'block'})
+    });
+ })
+</script> -->

@@ -1,0 +1,562 @@
+{% extends 'base.html'%}
+
+{%block title%} Attendance {%endblock%}
+
+
+{%block body%} 
+<script>
+   var timer=0
+   var t
+   var num=0
+   function p(){
+      t=setInterval(()=>{
+        window.location.reload(true);
+     }, 30000);}
+ 
+   if(timer==0)
+   {
+      p()
+   }
+</script>
+
+
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <a class="navbar-brand" href="#">
+       <img src="{{ url_for('static',filename='cme.jpg') }}" width="35" height="35" class="d-inline-block align-top" alt="#">
+      College of Military Engineering,Pune
+    </a>
+ 
+    <ul class="navbar-nav ml-auto">
+       <li class="nav-item">
+           <a class="nav-link" href="{{url_for('teacher_reg')}}">
+             Teachers
+           </a>
+       </li>
+       
+       <li class="nav-item">
+          <a class="nav-link font-weight-bold text-dark" href="{{url_for('attendance_sys')}}">
+            Attendance
+          </a>
+      </li>
+
+      <li class="nav-item">
+         <a class="nav-link" href="{{url_for('person1')}}">
+           Per-person
+         </a>
+     </li>
+     <li class="nav-item">
+      <a class="nav-link" href="{{url_for('logout')}}">
+        Logout
+      </a>
+  </li>
+ 
+   </ul>
+  </nav>
+  <div class="container mt-4">
+   
+    <div class="row">
+        <div class="col-md-4"><h2>Teacher's Attendance </h2></div>
+        <input type="text" id="filter" class="form-control col-md-3 ml-auto" placeholder="Search">
+        
+    </div>
+
+    {%with messages=get_flashed_messages()%}
+            {%if messages%} 
+            {%for message in messages%}
+            {%if message == 1 %}
+            <div class="alert alert-danger alert-dismissable mt-2" role="alert">
+               <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                   <span aria-hidden="true">x</span>
+               </button>
+               Teacher is not registered !!!!
+           </div>
+
+           {% elif message==2 %}
+
+           <div class="alert alert-danger alert-dismissable mt-2" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                <span aria-hidden="true">x</span>
+            </button>
+            Attendance system stopped
+        </div>
+
+
+
+
+           {% else %}
+
+            <div class="alert alert-success alert-dismissable mt-2" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                {{message}}
+            </div>
+            {%endif%}
+            {%endfor%}
+            {%endif%}
+            {%endwith%}
+
+
+
+
+
+    <div class="row mt-4" style="overflow: auto;height: 630px;">
+        <table class="table table-hover table-dark" id="table1" style="border-collapse: collapse; color:white">
+          
+            <tr>
+ 
+                <th class="text-center" style="position: sticky;top: 0;">Number</th>
+                <th class="text-center" style="position: sticky;top: 0; width:100px">Rank</th>
+                <th class="text-center" style="position: sticky;top: 0;">First Name</th>
+                <th class="text-center" style="position: sticky;top: 0;">Last Name</th>
+                <th class="text-center" style="position: sticky;top: 0;">Date</th>
+                <th class="text-center" style="position: sticky;top: 0;">In-Time</th>
+                <th class="text-center" style="position: sticky;top: 0;">Out-Time</th>
+    
+                <!-- <th style="position: sticky;top: 0;">Stream</th> -->
+              
+                <th class="text-center" style="position: sticky;top: 0;">Action</th>
+ 
+            </tr>
+            
+            {% for row,row2 in att %}
+
+               <tbody class="searchable">
+    
+                <tr>
+                    <td class="text-center">{{row2.roll_no}}</td>
+                    <td class="text-center" style="width:100px">{{row2.rank}}</td>
+                    <td class="text-center">{{row2.first_name}}</td>
+                    <td class="text-center">{{row2.last_name}}</td>
+                    <td class="text-center">{{row.date_att}}</td>
+                    <td class="text-center">{{row.in_time}}</td>
+                    <td class="text-center">{{row.out_time}}</td>
+                    <!-- <td class="text-center">{{att|length}}</td> -->
+
+                    <!-- <td>{{row2.stream}}</td> -->
+               
+                  
+                    <td class="text-center"> 
+                        <a href="/update_attendace/{{row.sr}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.sr}}">Edit</a>
+                        <a href="/delete_attendance/{{row.sr}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+                    </td>
+
+                </tr>
+               </tbody>
+               
+              
+
+
+                
+
+
+
+
+                <div id="modaledit{{row.sr}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                       <div class="modal-content">
+                          <div class="modal-header">
+                             <h4 class="modal-title">Update Information</h4>
+                          </div>
+                  
+                  
+                          <div class="modal-body">
+
+                             <form action="{{url_for('update_att')}}" method="POST">
+                                <!-- <div class="form-group">
+                                    <label>Roll Number:</label>
+                                    <input type="number" class="form-control" name="roll" required="1" value="{{row.roll_no}}">
+                                 </div> -->
+
+                                 <!-- <div class="form-group">
+                                          <label for="sel_rank">Rank:</label>
+                                          <select class="form-control" id="sel_rank" name="rank">
+                                             <option>Captain</option>
+                                             <option>class B</option>
+                                             <option>class C</option>
+                                             <option>class D</option>
+                                          </select>
+                                       </div>  -->
+
+                                 <div class="form-group">
+                                    <label for="sel_rank">Rank:</label>
+                                    <select class="form-control" id="sel_rank" name="rank" required="1" readonly>
+                                       <option>{{row2.rank}}</option>
+                              
+                                     
+                                    </select>
+                                 </div> 
+                                 
+                  
+                  
+                                <div class="form-group">
+                                   <label>First Name:</label>
+                                    <input type="hidden"  name="id" value="{{row.sr}}">
+                                   <input type="text" class="form-control" name="first_name" value="{{row2.first_name}}" readonly>
+                                </div>
+                  
+                  
+                  
+                                <div class="form-group">
+                                   <label>Last Name:</label>
+                                   <input type="text" class="form-control" name="last_name" value="{{row2.last_name}}" readonly>
+                                </div>
+                  
+                  
+                                <div class="form-group">
+                                 <label>Date:</label>
+                                 <input type="date" class="form-control" name="date" value={{row.date_att}} required="1">
+                              </div>
+          
+                              <div class="form-group">
+                                  <label>In-Time:</label>
+                                  <input type="time" class="form-control" name="in_time" value={{row.in_time}} required="1">
+                               </div>
+          
+                               <div class="form-group">
+                                  <label>Out-Time:</label>
+                                  <input type="time" class="form-control" name="out_time" value={{row.out_time}}>
+                               </div>
+
+
+                               
+
+                              
+                  
+                  
+                                <div class="form-group">
+                                   <button class="btn btn-primary" type="submit">Update</button>
+                                </div>
+                  
+                  
+                             </form>
+                          </div>
+                  
+                  
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                         </div>
+  
+                       </div>
+                    </div>
+                  
+                 </div>
+                {% endfor %}
+
+        
+        </table>
+    </div>
+
+    <div class="row justify-content-around">
+    
+     <div class="col-md-3 mt-3 text-center">
+         <form action="{{url_for('start_attendance')}}" method="POST">
+            <button class="btn btn-outline-success btn-md font-weight-bold" type="submit">Start Attendance</button>
+         </form>
+        
+     </div>
+     <div class="col-md-2 mt-3">
+        <form action="{{url_for('stop_attendance')}}" method="POST">
+            <button class="btn btn-outline-danger btn-md  font-weight-bold" type="submit">Stop Attendance</button>
+        </form>
+     </div>
+
+ 
+      <div class="col-md-2 mt-3">
+         <button onclick="refresher()" ondblclick="alerting()"  class="btn btn-outline-secondary btn-md font-weight-bold ">Auto-Refresh on</button>
+         <script>
+            function refresher() { 
+               num+=1
+               console.log(num)
+               timer=0
+               p()
+            }
+
+         </script>
+      </div>
+
+      <div class="col-md-2 mt-3">
+         <button onclick="refresheroff()" class="btn btn-outline-secondary btn-md font-weight-bold">Auto-Refresh off</button>
+         <script>
+            function refresheroff() { 
+               clearInterval(t)
+               timer=1
+            }
+
+         </script>
+      </div>
+
+      <div class="col-md-3 mt-3 text-center">
+         <button class="btn btn-outline-secondary btn-md font-weight-bold" data-toggle="modal" data-target="#mymodal">+ Add New Attendee</button>
+      </div>
+
+   </div>
+    
+
+
+     <div id="mymodal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+           <div class="modal-content">
+              <div class="modal-header">
+      
+                 <h4 class="modal-title">Add Attendee</h4>
+              </div>
+              <div class="modal-body">
+      
+                 <!-- <form action="{{ url_for('insert') }}" method="POST"> -->
+                 <form action="{{url_for('ins_attendee')}}" method="POST">
+                    <div class="form-group">
+                        <label>Number:</label>
+                        <input type="text" class="form-control" name="roll" required="1">           
+                     </div>
+
+                     <!-- <div class="form-group">
+                       <label for="sel_rank">Rank:</label>
+                       <select class="form-control" id="sel_rank" name="rank">
+                          <option>Captain</option>
+                          <option>Civilian</option>
+                          <option>Major</option>
+               
+                       </select>
+                     </div> 
+      
+      
+                    <div class="form-group">
+                       <label>First Name:</label>
+                       <input type="text" class="form-control" name="first_name" required="1">
+                    </div>
+      
+      
+                     <div class="form-group">
+                        <label>Last Name:</label>
+                        <input type="text" class="form-control" name="last_name" required="1">
+                    </div> -->
+      
+      
+                     <div class="form-group">
+                       <label>Date:</label>
+                       <input type="date" class="form-control" name="date" required="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>In-Time:</label>
+                        <input type="time" class="form-control" name="in_time" required="1">
+                     </div>
+
+                     <div class="form-group">
+                        <label>Out-Time:</label>
+                        <input type="time" class="form-control" name="out_time">
+                     </div>
+
+                    
+
+      
+      
+      
+                    <div class="form-group">
+                       <button class="btn btn-primary" type="submit">Add Attendee</button>
+                    </div>
+      
+      
+                 </form>
+      
+      
+              </div>
+              <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+      
+      
+           </div>
+        </div>   
+     </div>
+
+</div>
+<script src='/static/tablefilter.js'></script>
+
+<script>
+var filtersConfig = {
+  // instruct TableFilter location to import ressources from
+  base_path: '/static/tablefilter/',
+  col_1: 'select',
+  
+ 
+  
+  alternate_rows: false,
+  rows_counter: false,
+  btn_reset: true,
+  loader: true,
+  status_bar: true,
+  paging: true,
+  mark_active_columns: true,
+  highlight_keywords: true,
+  no_results_message: false,
+  col_types: [
+    'string', 'string','string','string',
+    'string', 'string','string'
+  ],
+  
+  
+  themes: [{ name: 'transparent' }],
+  extensions: [{
+    name: 'sort',
+    images_path: '/static/tablefilter/dist/tablefilter/style/themes/'
+  }]
+};
+
+var tf = new TableFilter('table1', filtersConfig);
+tf.init();
+</script>
+<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script> -->
+
+
+<script src="/static/jquery.min.js"></script>
+ 
+    <script>
+       $(document).ready(function () {
+
+      (function ($) {
+
+         $('#filter').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+                  return rex.test($(this).text());
+            }).show();
+
+         })
+
+      }(jQuery));
+
+});
+    </script>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 500px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=password] {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+
+
+               
+<button class="open-button" onclick="openForm()">Export attendance </button>
+
+<div class="form-popup" id="myForm">
+  <form action="{{ url_for("excel")}}" class="form-container" method="post">
+    <h1>Export to CSV</h1>
+
+    <label for="start">Start date:</label>
+
+<input type="date" id="start" name="start"
+       
+       min="2018-01-01" max="2050-12-31" required="1">
+       
+<label for="start">End date:</label>
+
+<input type="date" id="end" name="end"
+       
+       min="2018-01-01" max="2050-12-31" required="1">
+       
+
+  
+
+    <button type="submit" class="btn">Submit</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+   
+  </form>
+</div>
+
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+</script>
+ <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+</body>
+</html>
+
+</body>
+
+
+{%endblock%}

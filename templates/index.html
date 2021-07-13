@@ -1,0 +1,97 @@
+
+{% extends 'base.html'%}
+
+{%block title%} Image Capture {%endblock%}
+
+
+{%block body%} 
+<!-- <div class="jumbotron p-3 text-center">
+  <h1>College of Military Engineering Pune</h1>
+</div> -->
+
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+  <a class="navbar-brand" href="#">
+    <img src="{{ url_for('static',filename='cme.jpg') }}" width="35" height="35" class="d-inline-block align-top" alt="#">
+    College of Military Engineering,Pune
+  </a>
+
+  <ul class="navbar-nav ml-auto">
+     <li class="nav-item">
+         <a class="nav-link" href="#">
+           Teachers
+         </a>
+     </li>
+     <li class="nav-item">
+      <a class="nav-link" href="#">
+        Attendance
+      </a>
+
+ </ul>
+</nav>
+<div class="container mt-3">
+  {%with messages=get_flashed_messages()%}
+            {%if messages%} 
+            {%for message in messages%}
+            {%if message == 1 %}
+            <div class="alert alert-danger alert-dismissable mt-2" role="alert">
+               <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                   <span aria-hidden="true">x</span>
+               </button>
+                Encoding not registered !! Try again!! 
+           </div>
+
+            {%endif%}
+            {%endfor%}
+            {%endif%}
+            {%endwith%}
+
+<center>
+  <div id="camera">
+    <img src="{{ url_for('video_feed') }}" alt="video feed">
+  </div>
+  <div id="btns-div">
+    <a href="{{ url_for('capture') }}">
+    <img src="{{ url_for('static',filename='picture.png') }}" alt="take picture" class="btn btn-outline-light"> 
+    </a>
+
+  </div>
+
+ 
+  <table class="table table-bordered text-center">
+    <tbody>
+      <tr>
+        
+        <td>Number</td>
+        <td>{{roll_no}}</td>
+      </tr>
+      
+      <tr>
+        <td>Rank</td>
+        <td>{{rank}}</td>
+      </tr>
+
+      <tr>
+        <td>First Name</td>
+        <td>{{first_name}}</td>
+      </tr>
+
+      <tr>
+        <td>Last Name</td>
+        <td>{{last_name}}</td>
+      </tr>
+
+      <tr>
+        <td>Phone</td>
+        <td>{{phone}}</td>
+      </tr>
+
+ 
+
+
+    </tbody>
+  </table>
+</center>
+</div>
+
+
+{%endblock%}

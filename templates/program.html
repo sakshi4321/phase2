@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+.button0 {
+
+  background-color: #4CAF50; /* Green */
+  border: none;
+  width: 100%;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 12px;
+  display: block;
+  font-size: 24px;
+  margin: 4px 2px;
+  margin-top: 3px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+.button2 {background-color: #008CBA;} /* Blue */
+.button3 {background-color: #f44336;} /* Red */ 
+.button4 {background-color: #e7e7e7; color: black;} /* Gray */ 
+.button5 {background-color: #555555;} /* Black */
+</style>
+
+
+
+
+<!-- index.html -->
+<head>
+  <script type="text/javascript" src="/static/jquery.min.js"></script>
+  
+</head>
+  <body>
+    <style>
+        .container { 
+          height: 200px;
+          position: relative;
+           
+        }
+        
+        .center {
+          margin: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+        }
+        </style>
+  <div class="row">
+    <div class="col-md-4"><h1>Live system</h1></div>
+    
+    
+</div>  
+<div class="container">
+    
+    <div class="center">
+        
+    <button id='myButton' type="button" class="button0">Start</button>
+    
+    <script>
+      $('#myButton').click(function() {
+          $.ajax({
+                type:'POST',
+                url: "{{ url_for('start_attendance')}}",
+                dataType:"text",
+                success: function(response){
+                   console.log(response);
+                   alert(response);
+                }
+        });
+      });
+    </script>
+    
+    <button id='endButton' name="button_a" value="button_a" type="button" class="button0 button3" >End</button>
+    
+    <script>
+    $('#endButton').click(function() {
+          $.ajax({
+                type:'POST',
+                url: "{{ url_for('stop_attendance')}}",
+                dataType:"text",
+                success: function(response){
+                   console.log(response);
+                   
+                   }
+        });
+      });
+    </script>
+
+  
+   
+<a href=highway ><button  class="button0 button2">Return to index page</button></a> 
+</div>
+</div>
+  </body>
+ 
+
+</html> 
+
