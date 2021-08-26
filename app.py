@@ -596,6 +596,7 @@ def record_attend(flag):
             # print(current_date)
             everyone=db.session.query(Attendance,Teachers).join(Teachers).all()
             check,frame=video.read()
+            frame=cv2.resize(frame,(640,480))
             total_people=0
             t=datetime.datetime.now()
             flag=0
@@ -610,7 +611,8 @@ def record_attend(flag):
                 out_time1=""
                 date1=""
             x=interval.time()-start_time
-            if int(x)==60:
+            print("Interval Time",x)
+            if int(x)>=60:
 
                 print("YO")
                 start_time=interval.time()
@@ -660,6 +662,7 @@ def record_attend(flag):
                             print(name)
                             
                             print(present_candidates)
+                            
 
                             # if name in present_candidates:
                             #     name=create_global(name,1)
@@ -673,6 +676,7 @@ def record_attend(flag):
 
                                 name1=name
                                 name2=name
+                                 
                                 # in_time1=""
                                 # out_time1=""
                                 # date1=""
@@ -747,6 +751,7 @@ def record_attend(flag):
                                
                                 
                                 db.session.commit()
+                        
 
 
     else:
@@ -763,8 +768,8 @@ def start_attendance():
     flag=True
     global video
 
-    # video=cv2.VideoCapture('rtsp://admin:admin@123@192.168.1.240:554/cam/realmonitor?channel=2&subtype=0')
-    video=cv2.VideoCapture(0)
+    video=cv2.VideoCapture('rtsp://admin:admin@123@192.168.1.240:554/cam/realmonitor?channel=4&subtype=0')
+    #video=cv2.VideoCapture(0)
     flash("Attendance system started")
     # record_attend(flag)
     threading.Thread(target=record_attend,args=(flag,)).start()

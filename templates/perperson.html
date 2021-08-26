@@ -21,28 +21,33 @@
           Login
         </a>
     </li>
+    {% if current_user.is_authenticated %}
        <li class="nav-item">
            <a class="nav-link" href="{{url_for('teacher_reg')}}">
              Teachers
            </a>
        </li>
-       
+       {% endif %}
+       {% if current_user.is_authenticated %} 
        <li class="nav-item">
           <a class="nav-link" href="{{url_for('attendance_sys')}}">
             Attendance
           </a>
       </li>
+      {% endif %}
 
       <li class="nav-item">
          <a class="nav-link font-weight-bold text-dark" href="{{url_for('person1')}}">
            Per-person
          </a>
      </li>
+     {% if current_user.is_authenticated %}
      <li class="nav-item">
       <a class="nav-link" href="{{url_for('logout')}}">
         Logout
       </a>
   </li>
+  {% endif %}
  
    </ul>
   </nav>

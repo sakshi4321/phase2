@@ -82,6 +82,7 @@ class Camera(object):
 
     def get_feed(self):
         frame = self.get_frame()
+        frame=cv2.resize(face,(224,224))
         if frame is not None:
             ret, jpeg = cv.imencode('.jpg', frame)
             return jpeg.tobytes()
